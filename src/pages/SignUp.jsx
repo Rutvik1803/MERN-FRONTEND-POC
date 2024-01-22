@@ -38,7 +38,7 @@ export default function SignUp() {
     pass: ''
   }
   const navigate = useNavigate()
-  const [userData, setUserData] = useState(userIntialState);
+  const [formData, setformData] = useState(userIntialState);
   const [isError,setIsError] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -53,7 +53,7 @@ export default function SignUp() {
   };
 
   const handleChange = (event) =>{
-    setUserData({...userData,[event.target.id]: event.target.value})
+    setformData({...formData,[event.target.id]: event.target.value})
   }
 
   const handleSubmit = async (event) => {
@@ -61,12 +61,12 @@ export default function SignUp() {
     try{ 
       setIsLoading(true);
       await axios.post('http://localhost:4000/api/auth/signup', {
-      fname: userData.firstName,
-      lname: userData.lastName,
-      email: userData.email,
-      pass: userData.password
+      fname: formData.firstName,
+      lname: formData.lastName,
+      email: formData.email,
+      pass: formData.password
     })
-    setUserData(userIntialState);
+    setformData(userIntialState);
     setIsLoading(false);
     setOpenSnackbar(true);
   }

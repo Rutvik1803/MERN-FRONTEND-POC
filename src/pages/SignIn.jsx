@@ -13,6 +13,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Snackbar } from '@mui/material';
+import { signInSuccess, signInFailure, signInReset } from '../redux/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
@@ -33,19 +35,20 @@ function Copyright(props) {
 export default function SignIn() {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const {snackbarStatus} = useSelector((state)=> state.user);
   
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpenSnackbar(false);
+    dispatch(signInReset());
   };
 
   const handleChange = (event) => {
@@ -63,13 +66,12 @@ export default function SignIn() {
       {
         withCredentials: true,
       }
-     )
-     navigate('/')
-      console.log(response);
+      )
+      dispatch(signInSuccess(response));
+      navigate('/')
     }catch(error)
     {
-      console.error(error);
-      setOpenSnackbar(true);
+      dispatch(signInFailure(error))
 
     }
   
@@ -151,7 +153,7 @@ export default function SignIn() {
               </Grid>
             </Grid>
           </Box>
-          <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top',horizontal:'right'}} key={'top' +  'right'} >
+          <Snackbar open={snackbarStatus} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top',horizontal:'right'}} key={'top' +  'right'} >
           <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
             Invalid Credentials
           </Alert>
