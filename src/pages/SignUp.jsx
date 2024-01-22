@@ -31,8 +31,14 @@ function Copyright(props) {
 
 
 export default function SignUp() {
+  const userIntialState = {
+    fname: '',
+    lname: '',
+    email: '',
+    pass: ''
+  }
   const navigate = useNavigate()
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState(userIntialState);
   const [isError,setIsError] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -54,22 +60,22 @@ export default function SignUp() {
     event.preventDefault();
     try{ 
       setIsLoading(true);
-      const response = await axios.post('http://localhost:4000/api/auth/signup', {
+      await axios.post('http://localhost:4000/api/auth/signup', {
       fname: userData.firstName,
       lname: userData.lastName,
       email: userData.email,
       pass: userData.password
     })
+    setUserData(userIntialState);
     setIsLoading(false);
     setOpenSnackbar(true);
-    console.log("Res",response)}
+  }
     catch(error){
-      console.log("Entered")
       setIsLoading(false)
       setIsError(true)
     }
   };
-  console.log("User Data: ",userData);
+ 
 
   return (
       <Container component="main" maxWidth="xs">
@@ -160,7 +166,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/" sx={{color:'black'}} variant="body2">
+                <Link href="/signin" sx={{color:'black'}} variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

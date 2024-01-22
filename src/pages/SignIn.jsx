@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,6 +9,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import GoogleIcon from '@mui/icons-material/Google';
+import { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Alert, Snackbar } from '@mui/material';
 
 
 
@@ -28,15 +31,49 @@ function Copyright(props) {
 
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackbar(false);
   };
 
+  const handleChange = (event) => {
+    setFormData({...formData,[event.target.id]: event.target.value})
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try{
+      const response = await axios.post('http://localhost:4000/api/auth/signin', 
+      {
+        "email": formData.email,
+        "password": formData.password
+      },
+      {
+        withCredentials: true,
+      }
+     )
+     navigate('/')
+      console.log(response);
+    }catch(error)
+    {
+      console.error(error);
+      setOpenSnackbar(true);
+
+    }
+  
+  };
   return (
     
       <Container component="main" maxWidth="xs" >
@@ -65,6 +102,7 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
@@ -75,6 +113,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={handleChange}
             />
             <Button
               type="submit"
@@ -112,8 +151,14 @@ export default function SignIn() {
               </Grid>
             </Grid>
           </Box>
+          <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top',horizontal:'right'}} key={'top' +  'right'} >
+          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+            Invalid Credentials
+          </Alert>
+        </Snackbar>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      
   );
 }
