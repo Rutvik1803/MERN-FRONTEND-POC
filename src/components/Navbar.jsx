@@ -90,7 +90,7 @@ const Navbar = () => {
         elevation={0}
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}>
         <Toolbar sx={{ flexWrap: 'wrap', justifyContent: 'space-between' }}>
-          <div onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+          <div onClick={() => navigate('/home')} style={{ cursor: 'pointer' }}>
             <Typography
               variant='h6'
               color='inherit'
@@ -144,7 +144,9 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
       {/* All the components */}
+
       <Outlet />
+
       <Container
         maxWidth='md'
         component='footer'
