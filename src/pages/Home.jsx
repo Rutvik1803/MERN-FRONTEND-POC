@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -10,19 +9,20 @@ import CardHeader from '@mui/material/CardHeader';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import StarIcon from '@mui/icons-material/StarBorder';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
-import { Avatar, IconButton, Tooltip } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+    <Typography
+      variant='body2'
+      color='text.secondary'
+      align='center'
+      {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color='inherit' href='https://mui.com/'>
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
@@ -88,7 +88,12 @@ const footers = [
   },
   {
     title: 'Resources',
-    description: ['Resource', 'Resource name', 'Another resource', 'Final resource'],
+    description: [
+      'Resource',
+      'Resource name',
+      'Another resource',
+      'Final resource',
+    ],
   },
   {
     title: 'Legal',
@@ -100,76 +105,39 @@ const footers = [
 const defaultTheme = createTheme();
 
 export default function Pricing() {
-  const navigate = useNavigate();
   return (
     <ThemeProvider theme={defaultTheme}>
-      <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
+      <GlobalStyles
+        styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }}
+      />
       <CssBaseline />
-      <AppBar
-        position="static"
-        color="default"
-        elevation={0}
-        sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
-      >
-        <Toolbar sx={{ flexWrap: 'wrap' }}>
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            Mern Auth
-          </Typography>
-         
-          {/* <Button href="#" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-            Login
-          </Button> */}
-           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton sx={{ p: 0 }} onClick={()=> navigate('/profile')}>
-                <Avatar alt="Remy Sharp" src="" />
-              </IconButton>
-            </Tooltip>
-            {/* <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu> */}
-          </Box>
-        </Toolbar>
-      </AppBar>
       {/* Hero unit */}
-      <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
+      <Container
+        disableGutters
+        maxWidth='sm'
+        component='main'
+        sx={{ pt: 8, pb: 6 }}>
         <Typography
-          component="h1"
-          variant="h2"
-          align="center"
-          color="text.primary"
-          gutterBottom
-        >
+          component='h1'
+          variant='h2'
+          align='center'
+          color='text.primary'
+          gutterBottom>
           Pricing
         </Typography>
-        <Typography variant="h5" align="center" color="text.secondary" component="p">
-          Quickly build an effective pricing table for your potential customers with
-          this layout. It&apos;s built with default MUI components with little
-          customization.
+        <Typography
+          variant='h5'
+          align='center'
+          color='text.secondary'
+          component='p'>
+          Quickly build an effective pricing table for your potential customers
+          with this layout. It&apos;s built with default MUI components with
+          little customization.
         </Typography>
       </Container>
       {/* End hero unit */}
-      <Container maxWidth="md" component="main">
-        <Grid container spacing={5} alignItems="flex-end">
+      <Container maxWidth='md' component='main'>
+        <Grid container spacing={5} alignItems='flex-end'>
           {tiers.map((tier) => (
             // Enterprise card is full width at sm breakpoint
             <Grid
@@ -177,8 +145,7 @@ export default function Pricing() {
               key={tier.title}
               xs={12}
               sm={tier.title === 'Enterprise' ? 12 : 6}
-              md={4}
-            >
+              md={4}>
               <Card>
                 <CardHeader
                   title={tier.title}
@@ -202,23 +169,24 @@ export default function Pricing() {
                       justifyContent: 'center',
                       alignItems: 'baseline',
                       mb: 2,
-                    }}
-                  >
-                    <Typography component="h2" variant="h3" color="text.primary">
+                    }}>
+                    <Typography
+                      component='h2'
+                      variant='h3'
+                      color='text.primary'>
                       ${tier.price}
                     </Typography>
-                    <Typography variant="h6" color="text.secondary">
+                    <Typography variant='h6' color='text.secondary'>
                       /mo
                     </Typography>
                   </Box>
                   <ul>
                     {tier.description.map((line) => (
                       <Typography
-                        component="li"
-                        variant="subtitle1"
-                        align="center"
-                        key={line}
-                      >
+                        component='li'
+                        variant='subtitle1'
+                        align='center'
+                        key={line}>
                         {line}
                       </Typography>
                     ))}
@@ -234,37 +202,6 @@ export default function Pricing() {
           ))}
         </Grid>
       </Container>
-      {/* Footer */}
-      <Container
-        maxWidth="md"
-        component="footer"
-        sx={{
-          borderTop: (theme) => `1px solid ${theme.palette.divider}`,
-          mt: 8,
-          py: [3, 6],
-        }}
-      >
-        <Grid container spacing={4} justifyContent="space-evenly">
-          {footers.map((footer) => (
-            <Grid item xs={6} sm={3} key={footer.title}>
-              <Typography variant="h6" color="text.primary" gutterBottom>
-                {footer.title}
-              </Typography>
-              <ul>
-                {footer.description.map((item) => (
-                  <li key={item}>
-                    <Link href="#" variant="subtitle1" color="text.secondary">
-                      {item}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Grid>
-          ))}
-        </Grid>
-        <Copyright sx={{ mt: 5 }} />
-      </Container>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

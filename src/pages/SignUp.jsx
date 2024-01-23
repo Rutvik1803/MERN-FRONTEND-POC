@@ -14,6 +14,7 @@ import { Alert, IconButton, Snackbar } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import OAuth from '../components/OAuth';
 
 
 function Copyright(props) {
@@ -56,8 +57,7 @@ export default function SignUp() {
     setformData({...formData,[event.target.id]: event.target.value})
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     try{ 
       setIsLoading(true);
       await axios.post('http://localhost:4000/api/auth/signup', {
@@ -66,7 +66,6 @@ export default function SignUp() {
       email: formData.email,
       pass: formData.password
     })
-    setformData(userIntialState);
     setIsLoading(false);
     setOpenSnackbar(true);
   }
@@ -94,7 +93,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box  sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -155,6 +154,7 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
+              onClick={handleSubmit}
               type="submit"
               fullWidth
               variant="contained"
@@ -164,6 +164,7 @@ export default function SignUp() {
             >
               {isLoading ? 'Loading...' : 'SignUp'}
             </Button>
+            <OAuth/>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/signin" sx={{color:'black'}} variant="body2">
