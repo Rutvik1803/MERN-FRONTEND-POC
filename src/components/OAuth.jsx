@@ -26,6 +26,9 @@ const OAuth = () => {
           lname,
           email: result.user.email,
           photo: result.user.photoURL,
+        },
+        {
+          withCredentials: true,
         }
       );
 

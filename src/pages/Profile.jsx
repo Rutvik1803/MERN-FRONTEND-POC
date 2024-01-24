@@ -12,7 +12,7 @@ import {
   Box,
 } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getStorage,
   uploadBytesResumable,
@@ -23,6 +23,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { app } from '../firebase';
 import EditProfile from '../components/EditProfile';
+import { updateUserSuccess } from '../redux/user/userSlice';
+import axios from 'axios';
 
 function CircularProgressWithLabel(props) {
   return (
@@ -48,16 +50,23 @@ function CircularProgressWithLabel(props) {
 }
 
 export default function ProfilePage() {
+  const { currentUser } = useSelector((state) => state.user);
   const photoRef = useRef(null);
   const [image, setImage] = useState(undefined);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setimageError] = useState(false);
-  const [formData, setformData] = useState({});
+  const [formData, setformData] = useState(currentUser.data);
+
+  const dispatch = useDispatch();
 
   // Modal Things
   const [openModal, setOpenModal] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+  const handleChange = (e) => {
+    setformData({ ...formData, [e.target.id]: e.target.value });
+  };
 
   const handleModalClickOpen = () => {
     setOpenModal(true);
@@ -66,9 +75,6 @@ export default function ProfilePage() {
   const handleModalClose = () => {
     setOpenModal(false);
   };
-
-  console.log(formData);
-  console.log('ImagePercent', imagePercent);
 
   const handleFileUpload = async (image) => {
     const storage = getStorage(app);
@@ -93,11 +99,31 @@ export default function ProfilePage() {
       }
     );
   };
+
+  //API Calling
+  const handleDataSubmit = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/api/user/update/${currentUser.data._id}`,
+        {
+          formData,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      dispatch(updateUserSuccess(response));
+      handleModalClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (image) handleFileUpload(image);
   }, [image]);
 
-  const { currentUser } = useSelector((state) => state.user);
   return (
     <section>
       <Container sx={{ paddingY: 2 }}>
@@ -121,7 +147,6 @@ export default function ProfilePage() {
               <Avatar
                 onClick={() => photoRef.current.click()}
                 src={
-                  formData.profilePhoto ||
                   'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp'
                 }
                 alt='avatar'
@@ -213,9 +238,12 @@ export default function ProfilePage() {
         </Grid>
       </Container>
       <EditProfile
+        currentUser={currentUser}
         fullScreen={fullScreen}
         open={openModal}
         handleClose={handleModalClose}
+        handleChange={handleChange}
+        handleDataSubmit={handleDataSubmit}
       />
     </section>
   );

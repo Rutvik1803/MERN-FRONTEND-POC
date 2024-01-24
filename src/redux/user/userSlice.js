@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  currentUser: "",
+  currentUser: '',
   snackbarStatus: false,
-  error: "",
+  error: '',
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     signInReset: (state) => {
@@ -22,9 +22,13 @@ const userSlice = createSlice({
       state.error = action.payload;
       // we can do like state.error = action.payload to store the error
     },
+    updateUserSuccess: (state, action) => {
+      state.currentUser = action.payload;
+    },
   },
 });
 
-export const { signInSuccess, signInFailure, signInReset } = userSlice.actions;
+export const { signInSuccess, signInFailure, signInReset, updateUserSuccess } =
+  userSlice.actions;
 
 export default userSlice.reducer;
