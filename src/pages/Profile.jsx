@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Container,
   Grid,
@@ -9,10 +9,78 @@ import {
   Divider,
   Button,
   Tooltip,
+  Box,
 } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useSelector } from 'react-redux';
+import {
+  getStorage,
+  uploadBytesResumable,
+  ref,
+  getDownloadURL,
+} from 'firebase/storage';
+import { app } from '../firebase';
+
+function CircularProgressWithLabel(props) {
+  return (
+    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+      <CircularProgress variant='determinate' {...props} />
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Typography variant='caption' component='div' color='text.secondary'>
+          {props.value}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
 
 export default function ProfilePage() {
+  const photoRef = useRef(null);
+  const [image, setImage] = useState(undefined);
+  const [imagePercent, setImagePercent] = useState(0);
+  const [imageError, setimageError] = useState(false);
+  const [formData, setformData] = useState({});
+
+  console.log(formData);
+  console.log('ImagePercent', imagePercent);
+
+  const handleFileUpload = async (image) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + image.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, image);
+    //Below code is for the image uploaded to firebase storage and then we get the url of our image in the formData
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setImagePercent(Math.round(progress));
+      },
+      (error) => {
+        setimageError(true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+          setformData({ ...formData, profilePhoto: downloadURL })
+        );
+      }
+    );
+  };
+  useEffect(() => {
+    if (image) handleFileUpload(image);
+  }, [image]);
+
   const { currentUser } = useSelector((state) => state.user);
   return (
     <section>
@@ -28,7 +96,15 @@ export default function ProfilePage() {
                 flexDirection: 'column',
                 alignItems: 'center',
               }}>
+              <input
+                type='file'
+                ref={photoRef}
+                hidden
+                accept='image/*'
+                onChange={(e) => setImage(e.target.files[0])}
+              />
               <Avatar
+                onClick={() => photoRef.current.click()}
                 src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp'
                 alt='avatar'
                 style={{
@@ -37,6 +113,21 @@ export default function ProfilePage() {
                   height: 'auto',
                 }}
               />
+              <p style={{ textAlign: 'center', fontSize: '1rem' }}>
+                {imageError ? (
+                  <span style={{ color: 'red' }}>
+                    Error uploading image (file size must be less than 2 MB)
+                  </span>
+                ) : imagePercent > 0 && imagePercent < 100 ? (
+                  <CircularProgressWithLabel value={imagePercent} />
+                ) : imagePercent === 100 ? (
+                  <span style={{ color: 'green' }}>
+                    Image uploaded successfully
+                  </span>
+                ) : (
+                  ''
+                )}
+              </p>
               <Typography
                 variant='body2'
                 sx={{

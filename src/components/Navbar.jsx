@@ -100,15 +100,13 @@ const Navbar = () => {
             </Typography>
           </div>
 
-          {/* <Button href="#" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-            Login
-          </Button> */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title='Open settings'>
               <IconButton sx={{ p: 0 }} onClick={handleOpenUserMenu}>
                 <Avatar
                   alt={currentUser.data?.firstname}
-                  src={currentUser.data?.profilePhoto}
+                  // src={currentUser.data?.profilePhoto}
+                  src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp'
                 />
               </IconButton>
             </Tooltip>
