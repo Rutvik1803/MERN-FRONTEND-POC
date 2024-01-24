@@ -19,7 +19,10 @@ import {
   ref,
   getDownloadURL,
 } from 'firebase/storage';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import { app } from '../firebase';
+import EditProfile from '../components/EditProfile';
 
 function CircularProgressWithLabel(props) {
   return (
@@ -50,6 +53,19 @@ export default function ProfilePage() {
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setimageError] = useState(false);
   const [formData, setformData] = useState({});
+
+  // Modal Things
+  const [openModal, setOpenModal] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+  const handleModalClickOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleModalClose = () => {
+    setOpenModal(false);
+  };
 
   console.log(formData);
   console.log('ImagePercent', imagePercent);
@@ -90,7 +106,6 @@ export default function ProfilePage() {
             <Card
               sx={{
                 boxShadow: 'none',
-
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
@@ -105,7 +120,10 @@ export default function ProfilePage() {
               />
               <Avatar
                 onClick={() => photoRef.current.click()}
-                src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp'
+                src={
+                  formData.profilePhoto ||
+                  'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp'
+                }
                 alt='avatar'
                 style={{
                   width: '150px',
@@ -143,7 +161,7 @@ export default function ProfilePage() {
                 Full Stack Developer
               </Typography>
               <Tooltip title='Edit Profile Details'>
-                <Button>
+                <Button onClick={handleModalClickOpen}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox='0 0 512 512'
@@ -194,6 +212,11 @@ export default function ProfilePage() {
           </Grid>
         </Grid>
       </Container>
+      <EditProfile
+        fullScreen={fullScreen}
+        open={openModal}
+        handleClose={handleModalClose}
+      />
     </section>
   );
 }

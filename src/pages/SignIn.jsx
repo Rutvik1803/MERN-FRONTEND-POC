@@ -133,19 +133,6 @@ export default function SignIn() {
             }}>
             Sign In
           </Button>
-          {/* <Typography variant="body2" color="textSecondary" sx={{ display:'flex', justifyContent:'center' }}>
-          OR
-        </Typography>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 , backgroundColor: 'black', '&:hover':{
-                backgroundColor:'white', color: 'black'
-              }}}
-            >
-              <GoogleIcon/>
-            </Button> */}
           <OAuth />
           <Grid container>
             <Grid item xs>
