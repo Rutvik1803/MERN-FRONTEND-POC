@@ -12,9 +12,11 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { signOutSuccess } from '../redux/user/userSlice';
 
 function Copyright(props) {
   return (
@@ -35,14 +37,15 @@ function Copyright(props) {
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
 
-  const settings = ['Account', 'Dashboard', 'Logout'];
+  const settings = ['Account', 'Dashboard'];
 
   useEffect(() => {
     if (!currentUser) navigate('/signin');
-  }, []);
+  }, [currentUser]);
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -50,6 +53,15 @@ const Navbar = () => {
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await axios.get('http://localhost:4000/api/auth/signout');
+      dispatch(signOutSuccess());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const footers = [
@@ -104,7 +116,7 @@ const Navbar = () => {
             <Tooltip title='Open settings'>
               <IconButton sx={{ p: 0 }} onClick={handleOpenUserMenu}>
                 <Avatar
-                  alt={currentUser.data?.firstname}
+                  alt={currentUser?.data.firstname}
                   // src={currentUser.data?.profilePhoto}
                   src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp'
                 />
@@ -137,6 +149,9 @@ const Navbar = () => {
                   <Typography textAlign='center'>{setting}</Typography>
                 </MenuItem>
               ))}
+              <MenuItem onClick={handleSignOut}>
+                <Typography textAlign='center'>Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

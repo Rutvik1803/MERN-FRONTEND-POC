@@ -17,6 +17,9 @@ const userSlice = createSlice({
       state.currentUser = action.payload;
       state.snackbarStatus = false;
     },
+    OAuthSuccess: (state, action) => {
+      state.currentUser = action.payload;
+    },
     signInFailure: (state, action) => {
       state.snackbarStatus = true;
       state.error = action.payload;
@@ -25,10 +28,19 @@ const userSlice = createSlice({
     updateUserSuccess: (state, action) => {
       state.currentUser = action.payload;
     },
+    signOutSuccess: (state) => {
+      state.currentUser = null;
+    },
   },
 });
 
-export const { signInSuccess, signInFailure, signInReset, updateUserSuccess } =
-  userSlice.actions;
+export const {
+  signInSuccess,
+  signInFailure,
+  signInReset,
+  updateUserSuccess,
+  signOutSuccess,
+  OAuthSuccess,
+} = userSlice.actions;
 
 export default userSlice.reducer;

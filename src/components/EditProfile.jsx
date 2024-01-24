@@ -42,7 +42,7 @@ export default function EditProfile({
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  defaultValue={currentUser.data?.firstname}
+                  defaultValue={currentUser?.data?.firstname}
                   autoComplete='given-name'
                   name='firstName'
                   required
@@ -55,7 +55,7 @@ export default function EditProfile({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  defaultValue={currentUser.data?.lastname}
+                  defaultValue={currentUser?.data?.lastname}
                   required
                   fullWidth
                   id='lastName'
@@ -67,7 +67,7 @@ export default function EditProfile({
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  defaultValue={currentUser.data?.email}
+                  defaultValue={currentUser?.data?.email}
                   required
                   fullWidth
                   id='email'

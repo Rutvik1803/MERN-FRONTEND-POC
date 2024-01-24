@@ -57,7 +57,7 @@ export default function ProfilePage() {
   const [image, setImage] = useState(undefined);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setimageError] = useState(false);
-  const [formData, setformData] = useState(currentUser.data);
+  const [formData, setformData] = useState(currentUser?.data);
   const [snackbarStatus, setsnackbarStatus] = useState(false);
 
   const dispatch = useDispatch();
@@ -115,7 +115,7 @@ export default function ProfilePage() {
   const handleDataSubmit = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:4000/api/user/update/${currentUser.data._id}`,
+        `http://localhost:4000/api/user/update/${currentUser?.data?._id}`,
         {
           formData,
         },
@@ -190,7 +190,7 @@ export default function ProfilePage() {
                   fontSize: '1.25rem',
                   fontWeight: 500,
                 }}>
-                {`${currentUser.data?.firstname} ${currentUser.data?.lastname}`}
+                {`${currentUser?.data?.firstname} ${currentUser?.data?.lastname}`}
               </Typography>
               <Typography
                 variant='body2'
@@ -212,9 +212,9 @@ export default function ProfilePage() {
                   {[
                     {
                       label: 'Full Name',
-                      value: `${currentUser.data?.firstname} ${currentUser.data?.lastname}`,
+                      value: `${currentUser?.data?.firstname} ${currentUser?.data?.lastname}`,
                     },
-                    { label: 'Email', value: currentUser.data?.email },
+                    { label: 'Email', value: currentUser?.data?.email },
                     { label: 'Phone', value: '(097) 234-5678' },
                     { label: 'Mobile', value: '(098) 765-4321' },
                   ].map((item, index) => (

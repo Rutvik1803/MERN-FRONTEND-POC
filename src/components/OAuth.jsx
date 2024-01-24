@@ -5,7 +5,7 @@ import { GoogleAuthProvider, signInWithPopup, getAuth } from '@firebase/auth';
 import { app } from '../firebase';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { signInSuccess } from '../redux/user/userSlice';
+import { OAuthSuccess } from '../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 const OAuth = () => {
@@ -32,7 +32,7 @@ const OAuth = () => {
         }
       );
 
-      dispatch(signInSuccess(response));
+      dispatch(OAuthSuccess(response));
       navigate('/home');
     } catch (error) {}
   };
