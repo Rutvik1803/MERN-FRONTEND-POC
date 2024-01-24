@@ -10,6 +10,8 @@ import {
   Button,
   Tooltip,
   Box,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useDispatch, useSelector } from 'react-redux';
@@ -56,6 +58,7 @@ export default function ProfilePage() {
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setimageError] = useState(false);
   const [formData, setformData] = useState(currentUser.data);
+  const [snackbarStatus, setsnackbarStatus] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -74,6 +77,14 @@ export default function ProfilePage() {
 
   const handleModalClose = () => {
     setOpenModal(false);
+  };
+
+  const handlesnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setsnackbarStatus(false);
   };
 
   const handleFileUpload = async (image) => {
@@ -115,6 +126,7 @@ export default function ProfilePage() {
 
       dispatch(updateUserSuccess(response));
       handleModalClose();
+      setsnackbarStatus(true);
     } catch (error) {
       console.log(error);
     }
@@ -237,6 +249,19 @@ export default function ProfilePage() {
           </Grid>
         </Grid>
       </Container>
+      <Snackbar
+        open={snackbarStatus}
+        autoHideDuration={6000}
+        onClose={handlesnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        key={'top' + 'right'}>
+        <Alert
+          onClose={handlesnackbarClose}
+          severity='success'
+          sx={{ width: '100%' }}>
+          Details updated successfully!
+        </Alert>
+      </Snackbar>
       <EditProfile
         currentUser={currentUser}
         fullScreen={fullScreen}
