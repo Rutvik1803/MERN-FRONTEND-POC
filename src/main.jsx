@@ -4,11 +4,16 @@ import App from './App.jsx'
 import './index.css'
 import { ThemeProvider } from '@mui/material'
 import theme from './styles/theme.js'
+import {persistor, store} from './redux/store.js'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <Provider store={store}>
+    <PersistGate persistor={persistor} loading={null}>
     <ThemeProvider theme={theme}>
     <App />
     </ThemeProvider>
-  </React.StrictMode>,
+    </PersistGate>
+  </Provider>,
 )
