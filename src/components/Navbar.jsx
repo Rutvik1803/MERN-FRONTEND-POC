@@ -41,8 +41,6 @@ const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
 
-  const settings = ['Account', 'Dashboard'];
-
   useEffect(() => {
     if (!currentUser) navigate('/signin');
   }, [currentUser]);
@@ -108,7 +106,7 @@ const Navbar = () => {
               color='inherit'
               noWrap
               sx={{ flexGrow: 1 }}>
-              Mern Auth
+              BLOG APP
             </Typography>
           </div>
 
@@ -144,11 +142,13 @@ const Navbar = () => {
                 }}>
                 <Typography textAlign='center'>Profile</Typography>
               </MenuItem>
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign='center'>{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem
+                onClick={() => {
+                  navigate('/home');
+                  handleCloseUserMenu();
+                }}>
+                <Typography textAlign='center'>Dashboard</Typography>
+              </MenuItem>
               <MenuItem onClick={handleSignOut}>
                 <Typography textAlign='center'>Logout</Typography>
               </MenuItem>
@@ -165,7 +165,7 @@ const Navbar = () => {
         component='footer'
         sx={{
           borderTop: (theme) => `1px solid ${theme.palette.divider}`,
-          mt: 8,
+          mt: 4,
           py: [3, 6],
         }}>
         <Grid container spacing={4} justifyContent='space-evenly'>
